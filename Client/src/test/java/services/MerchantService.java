@@ -4,41 +4,41 @@ import Exceptions.UserException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import models.Customer;
+import models.Merchant;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import services.interfaces.CustomerServiceClient;
+import services.interfaces.MerchantServiceClient;
 
-import java.text.ParseException;
 import java.util.UUID;
-public class CustomerService {
+
+public class MerchantService {
     ResteasyClient client = (ResteasyClient) ClientBuilder.newClient();
     ResteasyWebTarget baseURL = client.target("http://localhost:8080");
-    CustomerServiceClient service = baseURL.proxy(CustomerServiceClient.class);
+    MerchantServiceClient service = baseURL.proxy(MerchantServiceClient.class);
 
-    public Customer createCustomer(String name){
-          Response response = service.postCustomer(name);
+    public Merchant createMerchant(String name){
+        Response response =  service.postMerchant(name);
 
-          return response.readEntity(Customer.class);
+        return response.readEntity(Merchant.class);
     }
 
-    public Customer getCustomerById(UUID id) throws UserException {
-        Response response = service.getCustomerById(id);
-
-        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
-            throw new UserException(response.readEntity(String.class));
-        }
-        return response.readEntity(Customer.class);
-    }
-
-    public Customer getCustomerByName(String name) throws UserException {
-        Response response = service.getCustomerByName(name);
+    public Merchant getMerchantById(UUID id) throws UserException {
+        Response response =  service.getMerchantById(id);
 
         if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
             throw new UserException(response.readEntity(String.class));
         }
 
-        return response.readEntity(Customer.class);
+        return response.readEntity(Merchant.class);
     }
 
+    public Merchant getMerchantByName(String name) throws UserException {
+        Response response =  service.getMerchantByName(name);
 
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
+            throw new UserException(response.readEntity(String.class));
+        }
+
+        return response.readEntity(Merchant.class);
+    }
 }
