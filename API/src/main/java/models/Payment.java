@@ -1,5 +1,7 @@
 package models;
 
+import java.util.UUID;
+
 public class Payment {
     private UUID id;
     private UUID customerId;
