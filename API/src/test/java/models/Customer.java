@@ -1,4 +1,4 @@
 package models;
 
-public class Customer {
+public class Customer  {
 }
