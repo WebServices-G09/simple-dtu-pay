@@ -6,11 +6,6 @@ public class Merchant {
     private UUID id;
     private String name;
 
-    public Merchant(String name) {
-        this.id = UUID.randomUUID();
-        this.name = name;
-    }
-
     public Merchant(){
 
     }

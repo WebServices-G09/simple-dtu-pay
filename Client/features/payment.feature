@@ -6,3 +6,4 @@ Feature: Payment
     Given the merchant is registered with Simple DTU Pay
     When the merchant initiates a payment for 10 kr by the customer
     Then the payment is successful
+
