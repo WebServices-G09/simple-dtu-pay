@@ -6,16 +6,20 @@ import models.Customer;
 
 import java.util.UUID;
 
+@Path("customer")
 public interface CustomerServiceClient {
     @POST
-    @Path("customer")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Customer postCustomer(String name);
 
     @GET
-    @Path("customer")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Customer getCustomer(UUID id);
+    public Customer getCustomerById(@PathParam("id") UUID id);
+
+    @GET
+    @Path("/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Customer getCustomerByName(@PathParam("name") String name);
 }

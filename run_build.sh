@@ -9,5 +9,4 @@ echo "Building and running Docker containers..."
 docker compose build
 docker compose up -d
 
-echo "Displaying logs..."
-docker compose logs -f
+mvn -f ./Client test

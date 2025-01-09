@@ -17,6 +17,7 @@ public class T1_SuccessfulPayment {
     private UUID customerId, merchantId;
     private PaymentService paymentService = new PaymentService();
     private boolean successful = false;
+
 //    @Given("a customer with name {string}")
 //    public void aCustomerWithName(String name) {
 //        //customer = new Customer(name);
@@ -45,7 +46,7 @@ public class T1_SuccessfulPayment {
 //    public void thePaymentIsSuccessful() {
 //        assertTrue(successful);
 //    }
-//
-//
+
+
 
 }

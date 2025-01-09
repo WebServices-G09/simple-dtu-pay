@@ -1,11 +1,13 @@
 
 package Controllers;
+import Exceptions.UserException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import Services.MerchantService;
+import models.Customer;
 import models.Merchant;
 
 import java.util.UUID;
@@ -20,6 +22,24 @@ public class MerchantController
         merchantService = new MerchantService();
     }
 
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response registerMerchant(String name) {
+        try {
+            var newMerchant = merchantService.createMerchant(name);
+
+            return Response.status(Response.Status.OK)
+                    .entity(newMerchant)
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\": \"Merchant creation failed\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+    }
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -27,48 +47,32 @@ public class MerchantController
         try {
             Merchant merchant = merchantService.getMerchantById(id);
 
-            if (merchant == null || merchant.getId() == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Merchant does not exist\"}")
-                        .type(MediaType.APPLICATION_JSON)
-                        .build();
-            }
-
             return Response.status(Response.Status.OK)
                     .entity(merchant)
                     .build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"error\": \"An unexpected error occurred\"}")
+        } catch (UserException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }
     }
 
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerMerchant(String inputJson) {
+    public Response getMerchantByName(@PathParam("name") String name) {
         try {
-            var jsonObject = new com.fasterxml.jackson.databind.ObjectMapper().readTree(inputJson);
-            String name = jsonObject.get("name").asText();
-
-            var newMerchant = merchantService.createMerchant(name);
-
-            if (newMerchant.getId() == null) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("{\"error\": \"Merchant creation failed\"}")
-                        .type(MediaType.APPLICATION_JSON)
-                        .build();
-            }
+            Merchant merchant = merchantService.getMerchantByName(name);
 
             return Response.status(Response.Status.OK)
-                    .entity(newMerchant)
+                    .entity(merchant)
+                    .type(MediaType.APPLICATION_JSON)
                     .build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"Invalid input format\"}")
+
+        } catch (UserException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }

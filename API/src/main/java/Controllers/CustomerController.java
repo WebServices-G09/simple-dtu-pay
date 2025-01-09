@@ -1,5 +1,6 @@
 
 package Controllers;
+import Exceptions.UserException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
@@ -27,19 +28,32 @@ public class CustomerController
         try {
             Customer customer = customerService.getCustomerById(id);
 
-            if (customer == null || customer.getId() == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Customer does not exist\"}")
-                        .type(MediaType.APPLICATION_JSON)
-                        .build();
-            }
-
             return Response.status(Response.Status.OK)
                     .entity(customer)
                     .build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"error\": \"An unexpected error occurred\"}")
+        } catch (UserException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCustomerByName(@PathParam("name") String name) {
+        try {
+            Customer customer = customerService.getCustomerByName(name);
+
+            return Response.status(Response.Status.OK)
+                    .entity(customer)
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+
+        } catch (UserException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }
@@ -53,19 +67,12 @@ public class CustomerController
         try {
             var newCustomer = customerService.createCustomer(name);
 
-            if (newCustomer.getId() == null) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("{\"error\": \"Customer creation failed\"}")
-                        .type(MediaType.APPLICATION_JSON)
-                        .build();
-            }
-
             return Response.status(Response.Status.OK)
                     .entity(newCustomer)
                     .build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"Invalid input format\"}")
+                    .entity("{\"error\": \"Customer creation failed\"}")
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }

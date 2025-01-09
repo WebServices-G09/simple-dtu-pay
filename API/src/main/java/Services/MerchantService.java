@@ -1,7 +1,7 @@
 
 package Services;
 
-import Services.Interfaces.ICustomerService;
+import Exceptions.UserException;
 import Services.Interfaces.IMerchantService;
 import models.Merchant;
 
@@ -10,7 +10,9 @@ import java.util.UUID;
 
 public class MerchantService implements IMerchantService {
     HashMap<UUID, Merchant> merchants = new HashMap<>();
-    public MerchantService(){}
+
+    public MerchantService(){
+    }
 
     @Override
     public Merchant createMerchant(String name){
@@ -19,9 +21,38 @@ public class MerchantService implements IMerchantService {
 
         return merchant;
     }
+
     @Override
-    public Merchant getMerchantById(UUID id) {
-        return merchants.get(id);
+    public Merchant getMerchant(String name) {
+        for (Merchant merchant : merchants.values()) {
+            if (merchant.getName().equalsIgnoreCase(name)) {
+                return merchant;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Merchant getMerchantByName(String name) throws UserException {
+        var merchant = getMerchant(name);
+
+        if (merchant == null) {
+            throw new UserException("{\"error\": \"Merchant does not exist\"}");
+        }
+
+        return merchant;
+    }
+
+    @Override
+    public Merchant getMerchantById(UUID id) throws UserException {
+        var merchant = merchants.get(id);
+
+        if (merchant == null) {
+            throw new UserException("{\"error\": \"Merchant does not exist\"}");
+        }
+
+        return merchant;
     }
 
     @Override
