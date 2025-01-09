@@ -21,6 +21,24 @@ public class CustomerController
         customerService = new CustomerService();
     }
 
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response registerCustomer(String name) {
+        try {
+            var newCustomer = customerService.createCustomer(name);
+
+            return Response.status(Response.Status.OK)
+                    .entity( newCustomer)
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\": \"Customer creation failed\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+    }
+
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -54,25 +72,6 @@ public class CustomerController
         } catch (UserException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage())
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
-        }
-    }
-
-
-    @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response registerCustomer(String name) {
-        try {
-            var newCustomer = customerService.createCustomer(name);
-
-            return Response.status(Response.Status.OK)
-                    .entity(newCustomer)
-                    .build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"Customer creation failed\"}")
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }

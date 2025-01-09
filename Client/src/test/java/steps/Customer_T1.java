@@ -1,5 +1,6 @@
 package steps;
 
+import Exceptions.UserException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import models.Customer;
@@ -20,13 +21,13 @@ public class Customer_T1 {
     }
 
     @Then("a Customer with name {string} has been created")
-    public void aCustomerWithNameHasBeenCreated(String string) {
+    public void aCustomerWithNameHasBeenCreated(String string) throws UserException {
         customer = customerService.getCustomerById(customerId);
         assertEquals(customer.getName(), string);
     }
 
     @When("I call the getCustomer service with name {string}")
-    public void iCallTheGetCustomerService(String string) {
+    public void iCallTheGetCustomerService(String string) throws UserException {
         customer = customerService.getCustomerByName(string);
     }
 

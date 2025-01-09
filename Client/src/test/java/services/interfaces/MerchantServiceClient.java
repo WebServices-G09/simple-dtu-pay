@@ -2,7 +2,7 @@ package services.interfaces;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import models.Merchant;
+import jakarta.ws.rs.core.Response;
 
 import java.util.UUID;
 
@@ -12,20 +12,15 @@ public interface MerchantServiceClient {
 
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Merchant postMerchant(String name);
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Merchant getMerchant(UUID id);
+    public Response postMerchant(String name);
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Merchant getMerchantById(@PathParam("id") UUID id);
+    public Response getMerchantById(@PathParam("id") UUID id);
 
     @GET
     @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Merchant getMerchantByName(@PathParam("name") String name);
+    public Response getMerchantByName(@PathParam("name") String name);
 }
