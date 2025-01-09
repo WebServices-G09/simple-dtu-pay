@@ -8,8 +8,7 @@ Feature: customer
     When I call the getCustomer service with name "Carla"
     Then I get the Customer with name "Carla"
 
-
-
-
-
-
+  Scenario: unregister Customer by Id
+    Given an existing customer with Id "UUID1"
+    When a customer with Id "UUID1" is unregistered
+    Then a customer with Id "UUID1" no longer exists in the customer list

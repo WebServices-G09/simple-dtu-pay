@@ -23,4 +23,9 @@ public interface CustomerServiceClient {
     @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCustomerByName(@PathParam("name") String name);
+    
+    @DELETE 
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteCustomer(@PathParam("id") UUID id);
 }

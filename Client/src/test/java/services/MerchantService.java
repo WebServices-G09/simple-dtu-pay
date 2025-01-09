@@ -41,4 +41,10 @@ public class MerchantService {
 
         return response.readEntity(Merchant.class);
     }
+    
+    public void deleteMerchant(UUID id){
+    	
+    	service.deleteMerchant(id);
+    	
+    }
 }

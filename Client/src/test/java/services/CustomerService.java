@@ -39,6 +39,12 @@ public class CustomerService {
 
         return response.readEntity(Customer.class);
     }
+    
+    public void deleteCustomer(UUID id){
+    	
+    	service.deleteCustomer(id);
+    	
+    }
 
 
 }
