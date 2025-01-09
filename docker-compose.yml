@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  simple-dtu-pay-api:
+    build: ./API
+    image: simple-dtu-pay-api
+    container_name: simple-dtu-pay-api
+    ports:
+      - "8080:8080"
