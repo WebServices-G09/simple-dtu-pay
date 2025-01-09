@@ -47,13 +47,10 @@ public class CustomerController
 
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerCustomer(String inputJson) {
+    public Response registerCustomer(String name) {
         try {
-            var jsonObject = new com.fasterxml.jackson.databind.ObjectMapper().readTree(inputJson);
-            String name = jsonObject.get("name").asText();
-
             var newCustomer = customerService.createCustomer(name);
 
             if (newCustomer.getId() == null) {

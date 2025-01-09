@@ -14,6 +14,7 @@ public class Customer_T1 {
     @When("a customer with name {string}")
     public void a_customer_with_name(String string) {
         customer = customerService.createCustomer(string);
+        return;
     }
     @Then("it returns the Customer object with name {string}")
     public void it_returns_the_customer_object_with_name(String string) {
