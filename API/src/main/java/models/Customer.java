@@ -1,9 +1,13 @@
 package models;
 
+import jakarta.json.bind.annotation.JsonbProperty;
+
 import java.util.UUID;
 
 public class Customer {
+    @JsonbProperty("id")
     private UUID id;
+    @JsonbProperty("name")
     private String name;
 
     public Customer(String name) {

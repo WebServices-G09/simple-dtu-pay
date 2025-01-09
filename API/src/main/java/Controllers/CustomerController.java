@@ -21,34 +21,57 @@ public class CustomerController
     }
 
     @GET
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCustomerById(UUID id)
-    {
-        Customer customer = customerService.getCustomerById(id);
+    public Response getCustomerById(@PathParam("id") UUID id) {
+        try {
+            Customer customer = customerService.getCustomerById(id);
 
-        if(customer.getId() == null){
-            Response.status(
-                    Response.Status.BAD_REQUEST)
-                    .entity("Customer does not exist").build();
+            if (customer == null || customer.getId() == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"error\": \"Customer does not exist\"}")
+                        .type(MediaType.APPLICATION_JSON)
+                        .build();
+            }
+
+            return Response.status(Response.Status.OK)
+                    .entity(customer)
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\": \"An unexpected error occurred\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
         }
-        //.entity(Entity.entity(object, MediaType.APPLICATION_JSON_TYPE)
-        return Response.ok(Entity.entity(customer, MediaType.APPLICATION_JSON)).build();
     }
+
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerCustomer(String name)
-    {
-        var newCustomer = new Customer();
-        newCustomer = customerService.createCustomer(name);
+    public Response registerCustomer(String inputJson) {
+        try {
+            var jsonObject = new com.fasterxml.jackson.databind.ObjectMapper().readTree(inputJson);
+            String name = jsonObject.get("name").asText();
 
-        if(newCustomer.getId() == null){
-            Response.status(
-                            Response.Status.BAD_REQUEST)
-                    .entity("Customer creation failed").build();
+            var newCustomer = customerService.createCustomer(name);
+
+            if (newCustomer.getId() == null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("{\"error\": \"Customer creation failed\"}")
+                        .type(MediaType.APPLICATION_JSON)
+                        .build();
+            }
+
+            return Response.status(Response.Status.OK)
+                    .entity(newCustomer)
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"error\": \"Invalid input format\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
         }
-
-        return Response.ok(Entity.entity(newCustomer, MediaType.APPLICATION_JSON)).build();
     }
+
 }
