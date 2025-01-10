@@ -16,6 +16,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.Payment;
 
+import java.util.UUID;
+
 @Path("/payment")
 public class PaymentController
 {
