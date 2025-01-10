@@ -9,6 +9,7 @@ import models.Payment;
 
 import java.util.HashMap;
 import java.util.UUID;
+
 public class CustomerService implements ICustomerService {
     private static HashMap<UUID, Customer> customers = new HashMap<>();
 
@@ -23,33 +24,12 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Customer getCustomer(String name) {
-        for (Customer customer : customers.values()) {
-            if (customer.getName().equalsIgnoreCase(name)) {
-                return customer;
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public Customer getCustomerByName(String name) throws UserException {
-        var customer = getCustomer(name);
-
-        if (customer == null) {
-            throw new UserException("{\"error\": \"Customer does not exist\"}");
-        }
-
-        return customer;
-    }
-
-    @Override
     public Customer getCustomerById(UUID id) throws UserException {
         var customer = customers.get(id);
 
         if (customer == null) {
-            throw new UserException("{\"error\": \"Customer does not exist\"}");
+            String error = String.format("customer with id \"%s\" is unknown", id);
+            throw new UserException(error);
         }
 
         return customer;

@@ -31,14 +31,4 @@ public class MerchantService {
 
         return response.readEntity(Merchant.class);
     }
-
-    public Merchant getMerchantByName(String name) throws UserException {
-        Response response =  service.getMerchantByName(name);
-
-        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
-            throw new UserException(response.readEntity(String.class));
-        }
-
-        return response.readEntity(Merchant.class);
-    }
 }

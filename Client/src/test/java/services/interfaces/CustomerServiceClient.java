@@ -18,9 +18,4 @@ public interface CustomerServiceClient {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCustomerById(@PathParam("id") UUID id);
-
-    @GET
-    @Path("/name/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCustomerByName(@PathParam("name") String name);
 }

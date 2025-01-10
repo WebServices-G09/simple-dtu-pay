@@ -18,9 +18,4 @@ public interface MerchantServiceClient {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMerchantById(@PathParam("id") UUID id);
-
-    @GET
-    @Path("/name/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMerchantByName(@PathParam("name") String name);
 }

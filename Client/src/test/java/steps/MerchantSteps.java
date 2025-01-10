@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
-public class Merchant_T1 {
+public class MerchantSteps {
 
     private UUID merchantId;
     private Merchant merchant;
@@ -26,14 +26,4 @@ public class Merchant_T1 {
         merchant = merchantService.getMerchantById(merchantId);
         assertEquals(merchant.getName(), string);
     }
-
-    @When("I call the getMerchant service with name {string}")
-    public void iCallTheGetMerchantServiceWithName(String string) throws UserException {
-        merchant = merchantService.getMerchantByName(string);
-    }
-    @Then("I get the Merchant with name {string}")
-    public void iGetTheMerchantWithName(String string) {
-        assertEquals(merchant.getName(), string);
-    }
-
 }

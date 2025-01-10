@@ -3,20 +3,20 @@ package services;
 import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.core.internal.com.fasterxml.jackson.databind.node.ObjectNode;
-import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
-import models.Customer;
-import models.Merchant;
 import models.Payment;
+import models.PaymentStatus;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import services.interfaces.PaymentServiceClient;
 
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Function;
+
+import Exceptions.UserException;
 
 public class PaymentService
 {
@@ -25,7 +25,7 @@ public class PaymentService
     ResteasyWebTarget baseURL = client.target("http://localhost:8080");
     PaymentServiceClient service = baseURL.proxy(PaymentServiceClient.class);
 
-    public UUID initializePayment(UUID customerId, UUID merchantId, double amount)
+    public UUID initializePayment(UUID customerId, UUID merchantId, double amount) throws UserException
     {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode obj = mapper.createObjectNode();
@@ -38,6 +38,10 @@ public class PaymentService
         {
             String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
             var response = service.postInitializePayment(jsonString);
+
+            if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+                throw new UserException(response.readEntity(String.class));
+            }
 
             return response.readEntity(UUID.class);
         }
@@ -71,5 +75,20 @@ public class PaymentService
         {
             return false;
         }
+    }
+    
+    public ArrayList<Payment> listPayments(UUID customerId, UUID merchantId) {
+        Response response = service.listPayments(customerId, merchantId);
+
+        var list =  response.readEntity(new GenericType<ArrayList>() {})
+                .stream()
+                .map((Function<HashMap<String,Object>, Payment>) h -> new Payment(
+                        UUID.fromString((String) h.get("id")),
+                        UUID.fromString((String) h.get("customerId")),
+                        UUID.fromString((String) h.get("merchantId")),
+                        ((BigDecimal) h.get("amount")).intValue(),
+                        PaymentStatus.valueOf((String) h.get("status")))).toList();
+
+        return new ArrayList<Payment>(list);
     }
 }
