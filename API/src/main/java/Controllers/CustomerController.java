@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.Response;
 
 import Services.CustomerService;
 import models.Customer;
+import models.dto.CustomerRequest;
 
 import java.util.UUID;
 
@@ -22,14 +23,19 @@ public class CustomerController
     }
 
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerCustomer(String firstName, String lastName, int cpr, int bankAccountNumber) {
+    public Response registerCustomer(CustomerRequest customerRequest) {
         try {
-            var newCustomer = customerService.createCustomer(firstName, lastName, cpr, bankAccountNumber);
+            var newCustomer = customerService.createCustomer(
+                    customerRequest.getFirstName(),
+                    customerRequest.getLastName(),
+                    customerRequest.getCpr(),
+                    customerRequest.getBankAccountNumber()
+            );
 
             return Response.status(Response.Status.OK)
-                    .entity( newCustomer)
+                    .entity(newCustomer)
                     .build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST)
@@ -38,6 +44,7 @@ public class CustomerController
                     .build();
         }
     }
+
 
     @GET
     @Path("/{id}")

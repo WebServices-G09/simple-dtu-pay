@@ -18,7 +18,6 @@ public class CustomerService implements ICustomerService {
     public Customer createCustomer(String fName, String lName, int cpr, int bankNumber) {
         var customer = new Customer(fName, lName, cpr, bankNumber);
         customers.put(customer.getId(), customer);
-
         return customer;
     }
 
