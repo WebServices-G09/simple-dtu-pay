@@ -12,15 +12,12 @@ public interface CustomerServiceClient {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postCustomer(String name);
+    public Response postCustomer(String fName, String lName, int cpr, int bankNumber);
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCustomerById(@PathParam("id") UUID id);
 
-    @GET
-    @Path("/name/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCustomerByName(@PathParam("name") String name);
+
 }

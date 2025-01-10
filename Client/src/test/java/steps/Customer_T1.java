@@ -15,24 +15,19 @@ public class Customer_T1 {
     private Customer customer;
     CustomerService customerService = new CustomerService();
 
-    @When("a customer with name {string} registers")
-    public void a_customer_with_name(String string) {
-        customerId = customerService.createCustomer(string).getId();
+    @When("a customer with fname {string} lName {string} cpr {int} accountNum {int} registers")
+    public void a_customer_with_name(String fName, String lName, int cpr, int accountNum) {
+
+        customerId = customerService.createCustomer(fName,lName, cpr, accountNum).getId();
     }
 
-    @Then("a Customer with name {string} has been created")
-    public void aCustomerWithNameHasBeenCreated(String string) throws UserException {
+    @Then("a Customer with name {string} {string} has been created")
+    public void aCustomerWithNameHasBeenCreated(String fName, String lName) throws UserException {
         customer = customerService.getCustomerById(customerId);
-        assertEquals(customer.getName(), string);
+        assertEquals(customer.getFirstName(), fName);
+        assertEquals(customer.getLastName(), lName);
+
     }
 
-    @When("I call the getCustomer service with name {string}")
-    public void iCallTheGetCustomerService(String string) throws UserException {
-        customer = customerService.getCustomerByName(string);
-    }
 
-    @Then("I get the Customer with name {string}")
-    public void iGetTheCustomerWithName(String string) {
-        assertEquals(customer.getName(), string);
-    }
 }

@@ -15,8 +15,8 @@ public class CustomerService {
     ResteasyWebTarget baseURL = client.target("http://localhost:8080");
     CustomerServiceClient service = baseURL.proxy(CustomerServiceClient.class);
 
-    public Customer createCustomer(String name){
-          Response response = service.postCustomer(name);
+    public Customer createCustomer(String fName, String lName, int cpr, int bankNumber){
+          Response response = service.postCustomer(fName, lName, cpr, bankNumber);
 
           return response.readEntity(Customer.class);
     }
@@ -30,14 +30,6 @@ public class CustomerService {
         return response.readEntity(Customer.class);
     }
 
-    public Customer getCustomerByName(String name) throws UserException {
-        Response response = service.getCustomerByName(name);
 
-        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
-            throw new UserException(response.readEntity(String.class));
-        }
-
-        return response.readEntity(Customer.class);
-    }
 
 }
