@@ -1,11 +1,10 @@
 package Services.Interfaces;
 
 import models.Customer;
-
 import java.util.UUID;
 
 public interface ICustomerService {
-    public Customer createCustomer(String name);
-    public Customer getCustomerById(UUID id);
-    public boolean deleteCustomer(UUID id);
+    Customer createCustomer(String name, String bankAccountNumber);
+    Customer getCustomerById(UUID id);
+    boolean deleteCustomer(UUID id);
 }
