@@ -1,6 +1,7 @@
 package services;
 
 import Exceptions.UserException;
+
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import models.Customer;
