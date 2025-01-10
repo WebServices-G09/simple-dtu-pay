@@ -24,9 +24,9 @@ public class CustomerController
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerCustomer(String name) {
+    public Response registerCustomer(String firstName, String lastName, int cpr, int bankAccountNumber) {
         try {
-            var newCustomer = customerService.createCustomer(name);
+            var newCustomer = customerService.createCustomer(firstName, lastName, cpr, bankAccountNumber);
 
             return Response.status(Response.Status.OK)
                     .entity( newCustomer)
@@ -57,25 +57,7 @@ public class CustomerController
         }
     }
 
-    @GET
-    @Path("name/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCustomerByName(@PathParam("name") String name) {
-        try {
-            Customer customer = customerService.getCustomerByName(name);
 
-            return Response.status(Response.Status.OK)
-                    .entity(customer)
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
-
-        } catch (UserException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(e.getMessage())
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
-        }
-    }
 
     @DELETE
     @Path("/{id}")

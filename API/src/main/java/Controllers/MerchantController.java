@@ -25,9 +25,9 @@ public class MerchantController
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerMerchant(String name) {
+    public Response registerMerchant(String firstName, String lastName, int cpr, int bankAccountNumber) {
         try {
-            var newMerchant = merchantService.createMerchant(name);
+            var newMerchant = merchantService.createMerchant(firstName, lastName, cpr, bankAccountNumber);
 
             return Response.status(Response.Status.OK)
                     .entity(newMerchant)
@@ -58,25 +58,6 @@ public class MerchantController
         }
     }
 
-    @GET
-    @Path("name/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getMerchantByName(@PathParam("name") String name) {
-        try {
-            Merchant merchant = merchantService.getMerchantByName(name);
-
-            return Response.status(Response.Status.OK)
-                    .entity(merchant)
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
-
-        } catch (UserException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(e.getMessage())
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
-        }
-    }
 
     @DELETE
     @Path("/{id}")

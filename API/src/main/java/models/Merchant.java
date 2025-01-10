@@ -1,14 +1,34 @@
 package models;
 
+import jakarta.json.bind.annotation.JsonbProperty;
+
 import java.util.UUID;
 
 public class Merchant {
-    private UUID id;
-    private String name;
 
-    public Merchant(String name) {
+    @JsonbProperty("id")
+    private UUID id;
+
+    @JsonbProperty("firstName")
+    private String firstName;
+
+    @JsonbProperty("lastName")
+    private String lastName;
+
+    @JsonbProperty("cpr")
+    private int cpr;
+
+    @JsonbProperty("bankAccountNumber")
+    private int bankAccountNumber;
+
+
+
+    public Merchant(String firstName, String lastName, int cpr, int bankAccountNumber) {
         this.id = UUID.randomUUID();
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cpr = cpr;
+        this.bankAccountNumber = bankAccountNumber;
     }
 
     public Merchant(){
@@ -19,15 +39,31 @@ public class Merchant {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getName() {
-        return name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getCpr() {
+        return cpr;
+    }
+
+    public int getBankAccountNumber() {
+        return bankAccountNumber;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setCpr(int cpr) {
+        this.cpr = cpr;
     }
 }

@@ -15,34 +15,15 @@ public class CustomerService implements ICustomerService {
     public CustomerService(){}
 
     @Override
-    public Customer createCustomer(String name) {
-        var customer = new Customer(name);
+    public Customer createCustomer(String fName, String lName, int cpr, int bankNumber) {
+        var customer = new Customer(fName, lName, cpr, bankNumber);
         customers.put(customer.getId(), customer);
 
         return customer;
     }
 
-    @Override
-    public Customer getCustomer(String name) {
-        for (Customer customer : customers.values()) {
-            if (customer.getName().equalsIgnoreCase(name)) {
-                return customer;
-            }
-        }
 
-        return null;
-    }
 
-    @Override
-    public Customer getCustomerByName(String name) throws UserException {
-        var customer = getCustomer(name);
-
-        if (customer == null) {
-            throw new UserException("{\"error\": \"Customer does not exist\"}");
-        }
-
-        return customer;
-    }
 
     @Override
     public Customer getCustomerById(UUID id) throws UserException {

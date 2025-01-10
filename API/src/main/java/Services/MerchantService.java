@@ -4,61 +4,42 @@ package Services;
 import Exceptions.UserException;
 import Services.Interfaces.IMerchantService;
 import models.Merchant;
+import models.Merchant;
+import models.Payment;
 
 import java.util.HashMap;
 import java.util.UUID;
-
 public class MerchantService implements IMerchantService {
-    private static HashMap<UUID, Merchant> merchants = new HashMap<>();
+    private static HashMap<UUID, Merchant> Merchants = new HashMap<>();
 
-    public MerchantService(){
-    }
-
-    @Override
-    public Merchant createMerchant(String name){
-        var merchant = new Merchant(name);
-        merchants.put(merchant.getId(), merchant);
-
-        return merchant;
-    }
+    public MerchantService(){}
 
     @Override
-    public Merchant getMerchant(String name) {
-        for (Merchant merchant : merchants.values()) {
-            if (merchant.getName().equalsIgnoreCase(name)) {
-                return merchant;
-            }
-        }
+    public Merchant createMerchant(String fName, String lName, int cpr, int bankNumber) {
+        var Merchant = new Merchant(fName, lName, cpr, bankNumber);
+        Merchants.put(Merchant.getId(), Merchant);
 
-        return null;
+        return Merchant;
     }
 
-    @Override
-    public Merchant getMerchantByName(String name) throws UserException {
-        var merchant = getMerchant(name);
 
-        if (merchant == null) {
-            throw new UserException("{\"error\": \"Merchant does not exist\"}");
-        }
 
-        return merchant;
-    }
 
     @Override
     public Merchant getMerchantById(UUID id) throws UserException {
-        var merchant = merchants.get(id);
+        var Merchant = Merchants.get(id);
 
-        if (merchant == null) {
+        if (Merchant == null) {
             throw new UserException("{\"error\": \"Merchant does not exist\"}");
         }
 
-        return merchant;
+        return Merchant;
     }
 
     @Override
     public boolean deleteMerchant(UUID id) {
-        if(merchants.containsKey(id)){
-            merchants.remove(id);
+        if(Merchants.containsKey(id)){
+            Merchants.remove(id);
             return true;
         }
 
