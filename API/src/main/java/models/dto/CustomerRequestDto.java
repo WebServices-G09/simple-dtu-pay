@@ -1,28 +1,12 @@
-package models;
+package models.dto;
 
-import java.util.UUID;
-
-public class Merchant {
-    private UUID id;
-
+public class CustomerRequestDto {
     private String firstName;
-
     private String lastName;
-
     private String cpr;
-
     private String bankAccountNumber;
 
-    public Merchant(){}
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
+    // Getters and Setters
     public String getFirstName() {
         return firstName;
     }

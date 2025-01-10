@@ -15,7 +15,7 @@ public class CustomerService implements ICustomerService {
     public CustomerService(){}
 
     @Override
-    public Customer createCustomer(String fName, String lName, int cpr, int bankNumber) {
+    public Customer createCustomer(String fName, String lName, String cpr, String bankNumber) {
         var customer = new Customer(fName, lName, cpr, bankNumber);
         customers.put(customer.getId(), customer);
         return customer;

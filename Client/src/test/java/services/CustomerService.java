@@ -4,6 +4,7 @@ import Exceptions.UserException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import models.Customer;
+import models.dtos.UserRequestDto;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import services.interfaces.CustomerServiceClient;
@@ -15,8 +16,8 @@ public class CustomerService {
     ResteasyWebTarget baseURL = client.target("http://localhost:8080");
     CustomerServiceClient service = baseURL.proxy(CustomerServiceClient.class);
 
-    public Customer createCustomer(String fName, String lName, int cpr, int bankNumber){
-          Response response = service.postCustomer(fName, lName, cpr, bankNumber);
+    public Customer createCustomer(UserRequestDto user){
+          Response response = service.postCustomer(user);
 
           return response.readEntity(Customer.class);
     }

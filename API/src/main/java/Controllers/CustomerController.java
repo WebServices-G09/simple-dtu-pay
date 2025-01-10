@@ -2,13 +2,12 @@
 package Controllers;
 import Exceptions.UserException;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import Services.CustomerService;
 import models.Customer;
-import models.dto.CustomerRequest;
+import models.dto.CustomerRequestDto;
 
 import java.util.UUID;
 
@@ -25,7 +24,7 @@ public class CustomerController
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerCustomer(CustomerRequest customerRequest) {
+    public Response registerCustomer(CustomerRequestDto customerRequest) {
         try {
             var newCustomer = customerService.createCustomer(
                     customerRequest.getFirstName(),

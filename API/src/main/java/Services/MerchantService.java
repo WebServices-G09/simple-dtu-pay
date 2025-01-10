@@ -15,11 +15,10 @@ public class MerchantService implements IMerchantService {
     public MerchantService(){}
 
     @Override
-    public Merchant createMerchant(String fName, String lName, int cpr, int bankNumber) {
-        var Merchant = new Merchant(fName, lName, cpr, bankNumber);
-        Merchants.put(Merchant.getId(), Merchant);
+    public Merchant createMerchant(Merchant merchant) {
+        Merchants.put(merchant.getId(), merchant);
 
-        return Merchant;
+        return merchant;
     }
 
 
