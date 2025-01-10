@@ -39,4 +39,5 @@ public class BankServiceImplement implements IBankService {
         BankService bankService = bankServiceService.getBankServicePort();
         return bankService.getAccount(accountId);
     }
+
 }

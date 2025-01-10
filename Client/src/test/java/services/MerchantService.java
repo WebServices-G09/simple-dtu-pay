@@ -5,6 +5,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import models.Customer;
 import models.Merchant;
+import models.dtos.UserRequestDto;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import services.interfaces.MerchantServiceClient;
@@ -16,8 +17,8 @@ public class MerchantService {
     ResteasyWebTarget baseURL = client.target("http://localhost:8080");
     MerchantServiceClient service = baseURL.proxy(MerchantServiceClient.class);
 
-    public Merchant createMerchant(String name){
-        Response response =  service.postMerchant(name);
+    public Merchant createMerchant(UserRequestDto user){
+        Response response =  service.postMerchant(user);
 
         return response.readEntity(Merchant.class);
     }

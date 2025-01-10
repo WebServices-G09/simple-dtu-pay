@@ -4,6 +4,7 @@ import Exceptions.UserException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import models.Merchant;
+import models.dtos.UserRequestDto;
 import services.MerchantService;
 
 import java.util.UUID;
@@ -16,24 +17,20 @@ public class Merchant_T1 {
     private Merchant merchant;
     MerchantService merchantService = new MerchantService();
 
-    @When("a merchant with name {string} registers")
-    public void a_merchant_with_name_registers(String string) {
-        merchantId = merchantService.createMerchant(string).getId();
-    }
+    @When("a merchant with fname {string} lName {string} cpr {string} accountNum {string} registers")
+    public void a_merchant_with_fname_l_name_cpr_account_num_registers(String fName, String lName, String cpr, String accountNum) {
+        var userDto = new UserRequestDto();
+        userDto.setFirstName(fName);
+        userDto.setLastName(lName);
+        userDto.setCpr(cpr);
+        userDto.setBankAccountNumber(accountNum);
 
-    @Then("a Merchant with name {string} has been created")
-    public void it_returns_the_merchant_object_with_name(String string) throws UserException {
+        merchantId = merchantService.createMerchant(userDto).getId();
+    }
+    @Then("a merchant with name {string} {string} has been created")
+    public void a_merchant_with_name_has_been_created(String fName, String lName) throws UserException {
         merchant = merchantService.getMerchantById(merchantId);
-        assertEquals(merchant.getName(), string);
+        assertEquals(merchant.getFirstName(), fName);
+        assertEquals(merchant.getLastName(), lName);
     }
-
-    @When("I call the getMerchant service with name {string}")
-    public void iCallTheGetMerchantServiceWithName(String string) throws UserException {
-        merchant = merchantService.getMerchantByName(string);
-    }
-    @Then("I get the Merchant with name {string}")
-    public void iGetTheMerchantWithName(String string) {
-        assertEquals(merchant.getName(), string);
-    }
-
 }

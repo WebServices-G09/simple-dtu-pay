@@ -4,6 +4,7 @@ import Exceptions.UserException;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import models.Customer;
+import models.dtos.UserRequestDto;
 import services.CustomerService;
 
 import java.util.UUID;
@@ -15,10 +16,15 @@ public class Customer_T1 {
     private Customer customer;
     CustomerService customerService = new CustomerService();
 
-    @When("a customer with fname {string} lName {string} cpr {int} accountNum {int} registers")
-    public void a_customer_with_name(String fName, String lName, int cpr, int accountNum) {
+    @When("a customer with fname {string} lName {string} cpr {string} accountNum {string} registers")
+    public void a_customer_with_fname_l_name_cpr_account_num_registers(String fName, String lName, String cpr, String accountNum) {
+        var userDto = new UserRequestDto();
+        userDto.setFirstName(fName);
+        userDto.setLastName(lName);
+        userDto.setCpr(cpr);
+        userDto.setBankAccountNumber(accountNum);
 
-        customerId = customerService.createCustomer(fName,lName, cpr, accountNum).getId();
+        customerId = customerService.createCustomer(userDto).getId();
     }
 
     @Then("a Customer with name {string} {string} has been created")

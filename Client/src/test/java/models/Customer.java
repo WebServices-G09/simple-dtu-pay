@@ -11,9 +11,9 @@ public class Customer {
 
     private String lastName;
 
-    private int cpr;
+    private String cpr;
 
-    private int bankAccountNumber;
+    private String bankAccountNumber;
 
     public Customer(){
 
@@ -43,19 +43,19 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public int getCpr() {
+    public String getCpr() {
         return cpr;
     }
 
-    public void setCpr(int cpr) {
+    public void setCpr(String cpr) {
         this.cpr = cpr;
     }
 
-    public int getBankAccountNumber() {
+    public String getBankAccountNumber() {
         return bankAccountNumber;
     }
 
-    public void setBankAccountNumber(int bankAccountNumber) {
+    public void setBankAccountNumber(String bankAccountNumber) {
         this.bankAccountNumber = bankAccountNumber;
     }
 }

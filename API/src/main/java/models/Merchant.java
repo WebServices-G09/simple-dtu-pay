@@ -16,14 +16,14 @@ public class Merchant {
     private String lastName;
 
     @JsonbProperty("cpr")
-    private int cpr;
+    private String cpr;
 
     @JsonbProperty("bankAccountNumber")
-    private int bankAccountNumber;
+    private String bankAccountNumber;
 
 
 
-    public Merchant(String firstName, String lastName, int cpr, int bankAccountNumber) {
+    public Merchant(String firstName, String lastName, String cpr, String bankAccountNumber) {
         this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,11 +47,11 @@ public class Merchant {
         return lastName;
     }
 
-    public int getCpr() {
+    public String getCpr() {
         return cpr;
     }
 
-    public int getBankAccountNumber() {
+    public String getBankAccountNumber() {
         return bankAccountNumber;
     }
 
@@ -63,7 +63,7 @@ public class Merchant {
         this.lastName = lastName;
     }
 
-    public void setCpr(int cpr) {
+    public void setCpr(String cpr) {
         this.cpr = cpr;
     }
 }

@@ -3,6 +3,7 @@ package services.interfaces;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import models.dtos.UserRequestDto;
 
 import java.util.UUID;
 
@@ -10,9 +11,9 @@ import java.util.UUID;
 public interface MerchantServiceClient {
     @POST
 
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postMerchant(String name);
+    public Response postMerchant(UserRequestDto user);
 
     @GET
     @Path("/{id}")

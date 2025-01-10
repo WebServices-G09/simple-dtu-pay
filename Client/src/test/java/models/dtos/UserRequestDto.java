@@ -1,12 +1,11 @@
-package models.dto;
+package models.dtos;
 
-public class CustomerRequest {
+public class UserRequestDto {
     private String firstName;
     private String lastName;
-    private int cpr;
-    private int bankAccountNumber;
+    private String cpr;
+    private String bankAccountNumber;
 
-    // Getters and Setters
     public String getFirstName() {
         return firstName;
     }
@@ -23,19 +22,19 @@ public class CustomerRequest {
         this.lastName = lastName;
     }
 
-    public int getCpr() {
+    public String getCpr() {
         return cpr;
     }
 
-    public void setCpr(int cpr) {
+    public void setCpr(String cpr) {
         this.cpr = cpr;
     }
 
-    public int getBankAccountNumber() {
+    public String getBankAccountNumber() {
         return bankAccountNumber;
     }
 
-    public void setBankAccountNumber(int bankAccountNumber) {
+    public void setBankAccountNumber(String bankAccountNumber) {
         this.bankAccountNumber = bankAccountNumber;
     }
 }

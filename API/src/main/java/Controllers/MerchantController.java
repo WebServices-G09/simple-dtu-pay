@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.Response;
 import Services.MerchantService;
 import models.Customer;
 import models.Merchant;
+import models.dto.MerchantRequestDto;
 
 import java.util.UUID;
 
@@ -23,11 +24,18 @@ public class MerchantController
     }
 
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerMerchant(String firstName, String lastName, int cpr, int bankAccountNumber) {
+    public Response registerMerchant(MerchantRequestDto merchantRequestDto) {
         try {
-            var newMerchant = merchantService.createMerchant(firstName, lastName, cpr, bankAccountNumber);
+            var merchant = new Merchant(
+                    merchantRequestDto.getFirstName(),
+                    merchantRequestDto.getLastName(),
+                    merchantRequestDto.getCpr(),
+                    merchantRequestDto.getBankAccountNumber()
+            );
+
+            var newMerchant = merchantService.createMerchant(merchant);
 
             return Response.status(Response.Status.OK)
                     .entity(newMerchant)
