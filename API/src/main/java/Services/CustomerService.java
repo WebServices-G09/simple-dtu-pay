@@ -5,12 +5,12 @@ import Exceptions.UserException;
 import Services.Interfaces.ICustomerService;
 import models.Customer;
 import models.Merchant;
+import models.Payment;
 
 import java.util.HashMap;
 import java.util.UUID;
-
 public class CustomerService implements ICustomerService {
-    HashMap<UUID, Customer> customers = new HashMap<>();
+    private static HashMap<UUID, Customer> customers = new HashMap<>();
 
     public CustomerService(){}
 
@@ -44,7 +44,6 @@ public class CustomerService implements ICustomerService {
         return customer;
     }
 
-
     @Override
     public Customer getCustomerById(UUID id) throws UserException {
         var customer = customers.get(id);
@@ -59,6 +58,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public boolean deleteCustomer(UUID id) {
         if(customers.containsKey(id)){
+            PaymentService.cancelCustomerPayments(id);
             customers.remove(id);
             return true;
         }
