@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -15,7 +16,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.Payment;
 
+import java.util.Set;
 import java.util.UUID;
+
+import org.acme.Student;
 
 @Path("/payment")
 public class PaymentController
@@ -29,6 +33,12 @@ public class PaymentController
         paymentService = new PaymentService();
         customerService = new CustomerService();
         merchantService = new MerchantService();
+    }
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Collection<Payment> listPayments() {
+        return paymentService.listPayments();
     }
 
     @POST

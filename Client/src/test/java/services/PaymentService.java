@@ -72,4 +72,12 @@ public class PaymentService
             return false;
         }
     }
+    
+    public Collection<Payment> listPayments(){
+    	
+    	response = service.listPayments();
+    	
+    	return response.readEntity(Collection<Payment.class>)
+    	
+    }
 }
