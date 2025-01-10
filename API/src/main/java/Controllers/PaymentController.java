@@ -16,11 +16,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.Payment;
 
-import java.util.Set;
-import java.util.UUID;
-
-import org.acme.Student;
-
 @Path("/payment")
 public class PaymentController
 {
