@@ -15,18 +15,44 @@
     </properties>
 
     <dependencies>
+        <!-- Jakarta XML Web Services API -->
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>3.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- JAX-WS Runtime (com.sun.xml.ws) for web service operations -->
+        <!-- SOAP dependencies -->
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-ri</artifactId>
+            <version>4.0.3</version>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope> <!-- Provided if running on a server with Jakarta support -->
+        </dependency>
+
         <!-- General REST framework -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-client</artifactId>
             <version>6.2.11.Final</version>
         </dependency>
+
         <!-- Serializer to and from JSON -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-jsonb</artifactId>
             <version>3.17.2</version>
         </dependency>
+
         <!-- Serializer to and from XML -->
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -34,6 +60,7 @@
             <version>3.17.1</version>
         </dependency>
 
+        <!-- Cucumber dependencies for testing -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
@@ -49,14 +76,14 @@
             <artifactId>cucumber-picocontainer</artifactId>
             <version>7.13.0</version>
         </dependency>
-        <!-- This is JUnit 5 aka Jupiter -->
+
+        <!-- JUnit 5 dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
-        <!--  These two dependencies allow to run JUnit 4 tests and Cucumber tests. -->
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
@@ -69,22 +96,19 @@
             <version>1.10.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Mockito for mocking in tests -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>5.5.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>jakarta.xml.ws</groupId>
-            <artifactId>jakarta.xml.ws-api</artifactId>
-            <version>3.0.0</version> <!-- or a newer version if available -->
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- JAX-WS Maven Plugin for wsimport generation -->
             <plugin>
                 <groupId>com.sun.xml.ws</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
@@ -105,7 +129,6 @@
                     <sourceDestDir>src/main/java</sourceDestDir>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

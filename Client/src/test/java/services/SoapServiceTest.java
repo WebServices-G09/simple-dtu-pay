@@ -3,36 +3,47 @@ package services;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService; // Generated service class
-import dtu.ws.fastmoney.User; // Assuming this is the generated class
+import dtu.ws.fastmoney.User; // Assuming this is the generated class for User
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 
 public class SoapServiceTest {
 
-    private BankService bankService;
-
-    public SoapServiceTest() {
-        // Initialize the service
-        BankServiceService service = new BankServiceService(); // Generated service class
-        bankService = service.getBankServicePort();  // Get the service port (concrete implementation)
-    }
-
     @Test
-    public void testCreateAccount() throws BankServiceException_Exception {
-        // Create a new User object
-        User user = new User();
-        user.setFirstName("John");
-        user.setLastName("Doe");
+    public void testCreateAccount() {
+        try {
+            // Initialize the service class generated from the WSDL
+            BankServiceService bankServiceService = new BankServiceService();
+            BankService bankService = bankServiceService.getBankServicePort();
 
-        // Set the balance as BigDecimal
-        BigDecimal balance = new BigDecimal("1000.00");
+            // Create a new User object with the necessary details
+            String firstName = "Johnsdfds";
+            String lastName = "Doeefdas";
+            String cprNumber = "123456-7893"; // Sample CPR number
+            BigDecimal initialBalance = new BigDecimal("100330.00"); // Initial balance
 
-        // Call the createAccountWithBalance method
-        String accountNumber = bankService.createAccountWithBalance(user, balance);
+            // Create a new User object (assuming the User class has setters or a constructor)
+            User user = new User();
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setCprNumber(cprNumber);
 
-        System.out.println("Account created with number: " + accountNumber);
+            // Call the createAccountWithBalance method to create the account
+            String accountId = bankService.createAccountWithBalance(user, initialBalance);
 
-        // You can add assertions to verify that the account was created successfully
+            // Assert that the account ID returned is not null, meaning the account creation succeeded
+            assertNotNull("Account should have been created", accountId);
+
+            System.out.println("Account created successfully with ID: " + accountId);
+
+        } catch (BankServiceException_Exception e) {
+            // In case of a failure, print the exception and fail the test
+            e.printStackTrace();
+            fail("Account creation failed: " + e.getMessage());
+        }
     }
 }
