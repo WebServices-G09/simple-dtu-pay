@@ -10,6 +10,7 @@ import services.interfaces.CustomerServiceClient;
 
 import java.text.ParseException;
 import java.util.UUID;
+
 public class CustomerService {
     ResteasyClient client = (ResteasyClient) ClientBuilder.newClient();
     ResteasyWebTarget baseURL = client.target("http://localhost:8080");
@@ -27,16 +28,6 @@ public class CustomerService {
         if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
             throw new UserException(response.readEntity(String.class));
         }
-        return response.readEntity(Customer.class);
-    }
-
-    public Customer getCustomerByName(String name) throws UserException {
-        Response response = service.getCustomerByName(name);
-
-        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
-            throw new UserException(response.readEntity(String.class));
-        }
-
         return response.readEntity(Customer.class);
     }
 

@@ -57,26 +57,6 @@ public class CustomerController
         }
     }
 
-    @GET
-    @Path("name/{name}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCustomerByName(@PathParam("name") String name) {
-        try {
-            Customer customer = customerService.getCustomerByName(name);
-
-            return Response.status(Response.Status.OK)
-                    .entity(customer)
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
-
-        } catch (UserException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(e.getMessage())
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
-        }
-    }
-
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)

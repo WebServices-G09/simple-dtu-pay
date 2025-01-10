@@ -42,8 +42,17 @@ public class PaymentService implements IPaymentService
         }
     }
 
-    public static Collection<Payment> getPayments()
-    {
-        return payments.values();
+    public ArrayList<Payment> getPaymentList(UUID customerId, UUID merchantId) {
+        ArrayList<Payment> paymentsList = new ArrayList<>();
+        for (Payment payment : payments.values())
+        {
+            if(payment.getCustomerId().toString().equals(customerId.toString()) &&
+                    payment.getMerchantId().toString().equals(merchantId.toString()))
+            {
+                paymentsList.add(payment);
+            }
+        }
+
+        return paymentsList;
     }
 }

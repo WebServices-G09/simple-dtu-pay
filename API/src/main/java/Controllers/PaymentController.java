@@ -7,15 +7,12 @@ import Services.PaymentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import models.Payment;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Path("/payment")
@@ -33,9 +30,11 @@ public class PaymentController
     }
     
     @GET
+    @Path("list/{customerId}/{merchantId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Collection<Payment> listPayments() {
-        return paymentService.listPayments();
+    @Produces(MediaType.APPLICATION_JSON)
+    public ArrayList<Payment> listPayments(@PathParam("customerId") UUID customerId, @PathParam("merchantId") UUID merchantId) {
+        return paymentService.getPaymentList(customerId, merchantId);
     }
 
     @POST
@@ -63,10 +62,16 @@ public class PaymentController
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }
-        catch (JsonProcessingException | UserException e)
+        catch (JsonProcessingException e)
         {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("{\"error\": "+ e.getMessage() + "}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+        catch (UserException e){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }
