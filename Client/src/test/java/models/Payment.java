@@ -8,12 +8,14 @@ public class Payment {
     private UUID merchantId;
     private double amount;
 
-    public Payment(UUID customerId, UUID merchantId, double amount) {
-        //UUID uuid = UUID.randomUUID();
-        this.id = UUID.randomUUID();
+    private PaymentStatus status;
+
+    public Payment(UUID paymentId, UUID customerId, UUID merchantId, double amount, PaymentStatus status) {
+        this.id = paymentId;
         this.customerId = customerId;
         this.merchantId = merchantId;
         this.amount = amount;
+        this.status = status;
     }
 
     public Payment(){}
@@ -22,33 +24,19 @@ public class Payment {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public UUID getCustomerId() {
         return customerId;
-    }
-
-    public void setCustomerId(UUID customerId) {
-        this.customerId = customerId;
     }
 
     public UUID getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(UUID merchantId) {
-        this.merchantId = merchantId;
-    }
-
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public PaymentStatus getStatus(){
+        return status;
     }
-
-    //UUID uuid = UUID.randomUUID();
 }

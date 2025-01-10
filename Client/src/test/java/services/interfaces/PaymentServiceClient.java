@@ -2,6 +2,7 @@ package services.interfaces;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import models.Customer;
 import models.Merchant;
 import models.Payment;
@@ -11,23 +12,15 @@ import java.util.UUID;
 
 public interface PaymentServiceClient
 {
-    @GET
-    @Path("person")
+    @POST
+    @Path("payment/initialize")
     @Produces(MediaType.APPLICATION_JSON)
-    public Customer getCustomer();
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postInitializePayment(String inputJson);
 
     @POST
-    @Path("customer")
+    @Path("payment/pay")
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Customer postCustomer(String name);
-
-    @POST
-    @Path("merchant")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Merchant postMerchant(String name);
-
-    @POST
-    @Path("payment")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public boolean postPayment(double amount, UUID customerId, UUID merchantId);
+    public Response postPay(String inputJson);
 }

@@ -40,5 +40,4 @@ public class CustomerService {
         return response.readEntity(Customer.class);
     }
 
-
 }

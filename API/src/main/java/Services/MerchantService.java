@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class MerchantService implements IMerchantService {
-    HashMap<UUID, Merchant> merchants = new HashMap<>();
+    private static HashMap<UUID, Merchant> merchants = new HashMap<>();
 
     public MerchantService(){
     }
