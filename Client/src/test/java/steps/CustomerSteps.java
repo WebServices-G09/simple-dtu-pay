@@ -9,10 +9,12 @@ import services.CustomerService;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CustomerSteps {
     private UUID customerId;
     private Customer customer;
+    private String exception;
     CustomerService customerService = new CustomerService();
 
     @When("a customer with name {string} registers")
@@ -25,4 +27,26 @@ public class CustomerSteps {
         customer = customerService.getCustomerById(customerId);
         assertEquals(customer.getName(), string);
     }
+
+    @When("the Customer unregisters")
+    public void theCustomerUnregisters() throws UserException {
+        boolean success =  customerService.unregisterCustomer(customerId);
+        assertTrue(success);
+    }
+    @Then("the Customer is not registred")
+    public void theCustomerIsNotRegistred() throws UserException {
+        try {
+            customer = customerService.getCustomerById(customerId);
+        } catch (UserException e) {
+            exception = e.getMessage();
+        }
+    }
+
+    @Then("the unkown customer error message {string} is returned")
+    public void theUnkownCustomerErrorMessageIsReturned(String string) {
+        String expectedError = String.format(string, customerId);
+
+        assertEquals(expectedError, exception);
+    }
+
 }

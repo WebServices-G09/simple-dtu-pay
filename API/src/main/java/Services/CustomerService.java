@@ -36,13 +36,14 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public boolean deleteCustomer(UUID id) {
-        if(customers.containsKey(id)){
-            PaymentService.cancelCustomerPayments(id);
-            customers.remove(id);
-            return true;
+    public boolean deleteCustomer(UUID id) throws UserException {
+        if(!customers.containsKey(id)){
+            String error = String.format("customer with id \"%s\" is unknown", id);
+            throw new UserException(error);
         }
 
-        return false;
+        PaymentService.cancelCustomerPayments(id);
+        customers.remove(id);
+        return true;
     }
 }
