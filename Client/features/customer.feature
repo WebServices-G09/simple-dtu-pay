@@ -7,3 +7,4 @@ Feature: customer
     Given a customer with name "RedBull" registers
     When the Customer unregisters
     Then the Customer is not registred
+    And the unkown customer error message "customer with id \"%s\" is unknown" is returned

@@ -37,13 +37,16 @@ public class MerchantSteps {
 
     @Then("the Merchant is not registred")
     public void theMerchantIsNotRegistred() throws UserException {
-        String expectedError = String.format("merchant with id \"%s\" is unknown", merchantId);
-
         try {
             merchant = merchantService.getMerchantById(merchantId);
         } catch (UserException e) {
             exception = e.getMessage();
         }
+    }
+
+    @Then("the unkown merchant error message {string} is returned")
+    public void theErrorMessageSIsUnknownIsReturned(String string) {
+        String expectedError = String.format(string, merchantId);
 
         assertEquals(expectedError, exception);
     }

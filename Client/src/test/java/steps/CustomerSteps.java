@@ -35,13 +35,16 @@ public class CustomerSteps {
     }
     @Then("the Customer is not registred")
     public void theCustomerIsNotRegistred() throws UserException {
-        String expectedError = String.format("customer with id \"%s\" is unknown", customerId);
-
         try {
             customer = customerService.getCustomerById(customerId);
         } catch (UserException e) {
             exception = e.getMessage();
         }
+    }
+
+    @Then("the unkown customer error message {string} is returned")
+    public void theUnkownCustomerErrorMessageIsReturned(String string) {
+        String expectedError = String.format(string, customerId);
 
         assertEquals(expectedError, exception);
     }
