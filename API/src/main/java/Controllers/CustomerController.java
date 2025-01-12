@@ -26,12 +26,7 @@ public class CustomerController
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerCustomer(CustomerRequestDto customerRequest) {
         try {
-            var newCustomer = customerService.createCustomer(
-                    customerRequest.getFirstName(),
-                    customerRequest.getLastName(),
-                    customerRequest.getCpr(),
-                    customerRequest.getBankAccountNumber()
-            );
+            var newCustomer = customerService.createCustomer(customerRequest);
 
             return Response.status(Response.Status.OK)
                     .entity(newCustomer)
@@ -43,7 +38,6 @@ public class CustomerController
                     .build();
         }
     }
-
 
     @GET
     @Path("/{id}")
@@ -63,8 +57,6 @@ public class CustomerController
         }
     }
 
-
-
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -72,20 +64,13 @@ public class CustomerController
         try {
             boolean isDeleted = customerService.deleteCustomer(id);
 
-            if (!isDeleted) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Customer does not exist\"}")
-                        .type(MediaType.APPLICATION_JSON)
-                        .build();
-            }
-
             return Response.status(Response.Status.OK)
-                    .entity("{\"message\": \"Customer deleted successfully\"}")
+                    .entity(isDeleted)
                     .type(MediaType.APPLICATION_JSON)
                     .build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"error\": \"An unexpected error occurred\"}")
+        } catch (UserException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }

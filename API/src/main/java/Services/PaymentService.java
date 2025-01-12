@@ -2,7 +2,6 @@ package Services;
 
 import Exceptions.UserException;
 import Services.Interfaces.IPaymentService;
-import dtu.ws.fastmoney.BankServiceException_Exception;
 import models.Customer;
 import models.Merchant;
 import models.Payment;

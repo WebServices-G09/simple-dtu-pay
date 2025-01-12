@@ -9,8 +9,8 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import services.interfaces.CustomerServiceClient;
 
-import java.text.ParseException;
 import java.util.UUID;
+
 public class CustomerService {
     ResteasyClient client = (ResteasyClient) ClientBuilder.newClient();
     ResteasyWebTarget baseURL = client.target("http://localhost:8080");
@@ -31,6 +31,14 @@ public class CustomerService {
         return response.readEntity(Customer.class);
     }
 
+    public boolean unregisterCustomer(UUID id) throws UserException {
+        Response response = service.unregisterCustomer(id);
 
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+            throw new UserException(response.readEntity(String.class));
+        }
+
+        return response.readEntity(boolean.class);
+    }
 
 }

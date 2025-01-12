@@ -20,5 +20,8 @@ public interface CustomerServiceClient {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCustomerById(@PathParam("id") UUID id);
 
-
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unregisterCustomer(@PathParam("id") UUID id);
 }
