@@ -31,4 +31,14 @@ public class MerchantService {
 
         return response.readEntity(Merchant.class);
     }
+
+    public boolean unregiterMerchant(UUID merchantId) throws UserException{
+        Response response = service.unregisterMerchant(merchantId);
+
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+            throw new UserException(response.readEntity(String.class));
+        }
+
+        return response.readEntity(boolean.class);
+    }
 }

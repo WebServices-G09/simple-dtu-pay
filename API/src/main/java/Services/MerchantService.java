@@ -35,12 +35,13 @@ public class MerchantService implements IMerchantService {
     }
 
     @Override
-    public boolean deleteMerchant(UUID id) {
-        if(merchants.containsKey(id)){
-            merchants.remove(id);
-            return true;
+    public boolean deleteMerchant(UUID id) throws UserException {
+        if(!merchants.containsKey(id)){
+            String error = String.format("merchant with id \"%s\" is unknown", id);
+            throw new UserException(error);
         }
 
-        return false;
+        merchants.remove(id);
+        return true;
     }
 }

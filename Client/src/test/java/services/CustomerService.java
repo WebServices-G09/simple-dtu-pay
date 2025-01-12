@@ -25,10 +25,20 @@ public class CustomerService {
     public Customer getCustomerById(UUID id) throws UserException {
         Response response = service.getCustomerById(id);
 
-        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
             throw new UserException(response.readEntity(String.class));
         }
         return response.readEntity(Customer.class);
+    }
+
+    public boolean unregisterCustomer(UUID id) throws UserException {
+        Response response = service.unregisterCustomer(id);
+
+        if (response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+            throw new UserException(response.readEntity(String.class));
+        }
+
+        return response.readEntity(boolean.class);
     }
 
 }
