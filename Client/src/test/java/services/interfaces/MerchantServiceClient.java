@@ -24,4 +24,9 @@ public interface MerchantServiceClient {
     @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMerchantByName(@PathParam("name") String name);
+
+    @DELETE
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unregisterMerchant(@PathParam("id") UUID id);
 }

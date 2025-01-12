@@ -2,10 +2,10 @@ package steps;
 
 //import Exceptions.BankServiceException;
 import dtu.ws.fastmoney.User;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
 import dtu.ws.fastmoney.Account;
 import models.Customer;
 import models.Merchant;
@@ -13,11 +13,12 @@ import models.dtos.UserRequestDto;
 import services.CustomerService;
 import services.MerchantService;
 import services.PaymentService;
-import services.interfaces.IBankService;
 import services.BankServiceImplement;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -40,13 +41,34 @@ public class BankAccount_T1 {
     MerchantService merchantService = new MerchantService();
     PaymentService paymentService = new PaymentService();
 
+    private static List<String> createdAccountIds = new ArrayList<>();
+
+
+    @io.cucumber.java.After
+    public void cleanupAccounts() {
+        for (String accountId : createdAccountIds) {
+            try {
+                bankService.deleteAccount(accountId);
+                System.out.println("Account " + accountId + " deleted after test");
+            } catch (Exception e) {
+                System.out.println("Failed to delete account " + accountId + ": " + e.getMessage());
+            }
+        }
+        createdAccountIds.clear();
+    }
+
+    private void registerAccount(String accountId) {
+        createdAccountIds.add(accountId);  // Track created account ids
+    }
 
     @Given("a customer with name {string}, last name {string}, and CPR {string}")
     public void a_customer_with_name_last_name_and_cpr(String firstName, String lastName, String cpr) {
+        userCustomer = new User();
         userCustomer.setFirstName(firstName);
         userCustomer.setLastName(lastName);
         userCustomer.setCprNumber(cpr);
     }
+
     @Given("the customer is registered with the bank with an initial balance of {double} kr")
     public void the_customer_is_registered_with_the_bank_with_an_initial_balance_of_kr(Double balance) {
         accountId = bankService.createAccount(
@@ -55,7 +77,10 @@ public class BankAccount_T1 {
                 userCustomer.getCprNumber(),
                 new BigDecimal(balance)
         );
+
+        registerAccount(accountId);
     }
+
     @Given("the customer is registered with Simple DTU Pay using their bank account")
     public void the_customer_is_registered_with_simple_dtu_pay_using_their_bank_account() {
         UserRequestDto payloadUser = new UserRequestDto();
@@ -66,12 +91,15 @@ public class BankAccount_T1 {
 
         customer = customerService.createCustomer(payloadUser);
     }
+
     @Given("a merchant with name {string}, last name {string}, and CPR {string}")
     public void a_merchant_with_name_last_name_and_cpr(String firstName, String lastName, String cpr) {
+        userMerchant = new User();
         userMerchant.setFirstName(firstName);
         userMerchant.setLastName(lastName);
         userMerchant.setCprNumber(cpr);
     }
+
     @Given("the merchant is registered with the bank with an initial balance of {double} kr")
     public void the_merchant_is_registered_with_the_bank_with_an_initial_balance_of_kr(Double balance) {
         accountId = bankService.createAccount(
@@ -80,7 +108,10 @@ public class BankAccount_T1 {
                 userMerchant.getCprNumber(),
                 new BigDecimal(balance)
         );
+
+        registerAccount(accountId);
     }
+
     @Given("the merchant is registered with Simple DTU Pay using their bank account")
     public void the_merchant_is_registered_with_simple_dtu_pay_using_their_bank_account() {
         UserRequestDto payloadUser = new UserRequestDto();
@@ -91,6 +122,7 @@ public class BankAccount_T1 {
 
         merchant = merchantService.createMerchant(payloadUser);
     }
+
     @When("the merchant initiates a payment for {int} kr by the customer")
     public void the_merchant_initiates_a_payment_for_kr_by_the_customer(Integer amount) {
         paymentId = paymentService.initializePayment(
@@ -99,29 +131,29 @@ public class BankAccount_T1 {
                 amount
         );
     }
+
     @Then("the payment is successful")
     public void the_payment_is_successful() {
         isPaymentSuccessful = paymentService.pay(paymentId,10);
         assertTrue(isPaymentSuccessful);
     }
+
     @Then("the balance of the customer at the bank is {int} kr")
-    public void the_balance_of_the_customer_at_the_bank_is_kr(Integer balance) {
-        try {
-            customerAccount = bankService.getAccount(customer.getBankAccountNumber());
-        } catch (BankServiceException_Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void the_balance_of_the_customer_at_the_bank_is_kr(Integer balance) throws BankServiceException_Exception{
+        customerAccount = bankService.getAccount(customer.getBankAccountNumber());
 
-        assertEquals(balance, customerAccount.getBalance());
+        BigDecimal expectedBalance = BigDecimal.valueOf(balance).stripTrailingZeros();
+        BigDecimal actualBalance = customerAccount.getBalance().stripTrailingZeros();
+
+        assertEquals(expectedBalance, actualBalance);
     }
-    @Then("the balance of the merchant at the bank is {int} kr")
-    public void the_balance_of_the_merchant_at_the_bank_is_kr(Integer balance) {
-        try{
-            merchantAccount = bankService.getAccount(merchant.getBankAccountNumber());
-        }catch (BankServiceException_Exception e){
-            throw new RuntimeException(e);
-        }
 
-        assertEquals(balance, merchantAccount.getBalance());
+    @Then("the balance of the merchant at the bank is {int} kr")
+    public void the_balance_of_the_merchant_at_the_bank_is_kr(Integer balance) throws BankServiceException_Exception{
+        merchantAccount = bankService.getAccount(merchant.getBankAccountNumber());
+
+        BigDecimal expectedBalance = BigDecimal.valueOf(balance).stripTrailingZeros();
+        BigDecimal actualBalance = merchantAccount.getBalance().stripTrailingZeros();
+        assertEquals(expectedBalance, actualBalance);
     }
 }

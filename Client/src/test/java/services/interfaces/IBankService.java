@@ -23,4 +23,6 @@ public interface IBankService {
      * @throws BankServiceException_Exception If the account doesn't exist or another error occurs.
      */
     Account getAccount(String accountId) throws BankServiceException_Exception;
+
+    void deleteAccount(String accountId);
 }

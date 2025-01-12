@@ -28,14 +28,7 @@ public class MerchantController
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerMerchant(MerchantRequestDto merchantRequestDto) {
         try {
-            var merchant = new Merchant(
-                    merchantRequestDto.getFirstName(),
-                    merchantRequestDto.getLastName(),
-                    merchantRequestDto.getCpr(),
-                    merchantRequestDto.getBankAccountNumber()
-            );
-
-            var newMerchant = merchantService.createMerchant(merchant);
+            var newMerchant = merchantService.createMerchant(merchantRequestDto);
 
             return Response.status(Response.Status.OK)
                     .entity(newMerchant)
@@ -66,7 +59,6 @@ public class MerchantController
         }
     }
 
-
     @DELETE
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -74,20 +66,13 @@ public class MerchantController
         try {
             boolean isDeleted = merchantService.deleteMerchant(id);
 
-            if (!isDeleted) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("{\"error\": \"Merchant does not exist\"}")
-                        .type(MediaType.APPLICATION_JSON)
-                        .build();
-            }
-
             return Response.status(Response.Status.OK)
-                    .entity("{\"message\": \"Merchant deleted successfully\"}")
+                    .entity(isDeleted)
                     .type(MediaType.APPLICATION_JSON)
                     .build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"error\": \"An unexpected error occurred\"}")
+        } catch (UserException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }
