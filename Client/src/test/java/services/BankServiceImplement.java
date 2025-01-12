@@ -10,7 +10,7 @@ public class BankServiceImplement implements IBankService {
     @Override
     public String createAccount(String firstName, String lastName, String cpr, BigDecimal initialBalance) {
         try {
-            // Initialize the generated service class
+
             BankServiceService bankServiceService = new BankServiceService();
             BankService bankService = bankServiceService.getBankServicePort();
 
@@ -20,7 +20,7 @@ public class BankServiceImplement implements IBankService {
             user.setLastName(lastName);
             user.setCprNumber(cpr);
 
-            // Call the SOAP method to create the account with the specified balance
+
             String accountId = bankService.createAccountWithBalance(user, initialBalance);
 
             // Return the account ID
@@ -38,6 +38,20 @@ public class BankServiceImplement implements IBankService {
         BankServiceService bankServiceService = new BankServiceService();
         BankService bankService = bankServiceService.getBankServicePort();
         return bankService.getAccount(accountId);
+    }
+
+    public void deleteAccount(String accountId) {
+        try {
+            BankServiceService bankServiceService = new BankServiceService();
+            BankService bankService = bankServiceService.getBankServicePort();
+
+
+            bankService.retireAccount(accountId);
+            System.out.println("Deleted account: " + accountId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete account: " + accountId);
+        }
     }
 
 }

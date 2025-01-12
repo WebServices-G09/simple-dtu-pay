@@ -6,10 +6,13 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en.When;
+
 import dtu.ws.fastmoney.Account;
 import models.Customer;
 import models.Merchant;
 import models.dtos.UserRequestDto;
+import org.junit.After;
 import services.CustomerService;
 import services.MerchantService;
 import services.PaymentService;
@@ -18,6 +21,8 @@ import services.BankServiceImplement;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -40,9 +45,30 @@ public class BankAccount_T1 {
     MerchantService merchantService = new MerchantService();
     PaymentService paymentService = new PaymentService();
 
+    private static List<String> createdAccountIds = new ArrayList<>();
+
+
+    @io.cucumber.java.After
+    public void cleanupAccounts() {
+        for (String accountId : createdAccountIds) {
+            try {
+                bankService.deleteAccount(accountId);
+                System.out.println("Account " + accountId + " deleted after test");
+            } catch (Exception e) {
+                System.out.println("Failed to delete account " + accountId + ": " + e.getMessage());
+            }
+        }
+        createdAccountIds.clear();
+    }
+
+    private void registerAccount(String accountId) {
+        createdAccountIds.add(accountId);  // Track created account ids
+    }
+
 
     @Given("a customer with name {string}, last name {string}, and CPR {string}")
     public void a_customer_with_name_last_name_and_cpr(String firstName, String lastName, String cpr) {
+        userCustomer = new User();
         userCustomer.setFirstName(firstName);
         userCustomer.setLastName(lastName);
         userCustomer.setCprNumber(cpr);
@@ -55,6 +81,7 @@ public class BankAccount_T1 {
                 userCustomer.getCprNumber(),
                 new BigDecimal(balance)
         );
+        registerAccount(accountId);
     }
     @Given("the customer is registered with Simple DTU Pay using their bank account")
     public void the_customer_is_registered_with_simple_dtu_pay_using_their_bank_account() {
@@ -68,6 +95,7 @@ public class BankAccount_T1 {
     }
     @Given("a merchant with name {string}, last name {string}, and CPR {string}")
     public void a_merchant_with_name_last_name_and_cpr(String firstName, String lastName, String cpr) {
+        userMerchant = new User();
         userMerchant.setFirstName(firstName);
         userMerchant.setLastName(lastName);
         userMerchant.setCprNumber(cpr);
@@ -80,6 +108,7 @@ public class BankAccount_T1 {
                 userMerchant.getCprNumber(),
                 new BigDecimal(balance)
         );
+        registerAccount(accountId);
     }
     @Given("the merchant is registered with Simple DTU Pay using their bank account")
     public void the_merchant_is_registered_with_simple_dtu_pay_using_their_bank_account() {
@@ -112,7 +141,10 @@ public class BankAccount_T1 {
             throw new RuntimeException(e);
         }
 
-        assertEquals(balance, customerAccount.getBalance());
+        BigDecimal expectedBalance = BigDecimal.valueOf(balance).stripTrailingZeros();
+        BigDecimal actualBalance = customerAccount.getBalance().stripTrailingZeros();
+
+        assertEquals(expectedBalance, actualBalance);
     }
     @Then("the balance of the merchant at the bank is {int} kr")
     public void the_balance_of_the_merchant_at_the_bank_is_kr(Integer balance) {
@@ -122,6 +154,8 @@ public class BankAccount_T1 {
             throw new RuntimeException(e);
         }
 
-        assertEquals(balance, merchantAccount.getBalance());
+        BigDecimal expectedBalance = BigDecimal.valueOf(balance).stripTrailingZeros();
+        BigDecimal actualBalance = merchantAccount.getBalance().stripTrailingZeros();
+        assertEquals(expectedBalance, actualBalance);
     }
 }

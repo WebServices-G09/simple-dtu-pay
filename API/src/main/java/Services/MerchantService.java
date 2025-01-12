@@ -44,4 +44,8 @@ public class MerchantService implements IMerchantService {
 
         return false;
     }
+    // Static getter to access merchants map
+    public static HashMap<UUID, Merchant> getMerchants() {
+        return Merchants;
+    }
 }

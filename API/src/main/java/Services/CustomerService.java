@@ -45,4 +45,7 @@ public class CustomerService implements ICustomerService {
 
         return false;
     }
+    public static HashMap<UUID, Customer> getCustomers() {
+        return customers;
+    }
 }

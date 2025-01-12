@@ -1,6 +1,7 @@
 package Controllers;
 
 import Exceptions.UserException;
+import Services.BankServiceImplement;
 import Services.CustomerService;
 import Services.MerchantService;
 import Services.PaymentService;
@@ -23,6 +24,7 @@ public class PaymentController
     private static PaymentService paymentService;
     private static CustomerService customerService;
     private static MerchantService merchantService;
+    private static BankServiceImplement bankService;
 
     public PaymentController()
     {
@@ -78,7 +80,7 @@ public class PaymentController
             double amount = jsonObject.get("amount").asDouble();
 
             boolean result = paymentService.pay(paymentId, amount);
-
+            System.out.println(result);
             if(!result)
             {
                 return Response.status(Response.Status.PAYMENT_REQUIRED)
